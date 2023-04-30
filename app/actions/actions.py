@@ -17,7 +17,9 @@ def paraphrase(tree: str, limit: int):
     index_value = 0
     counter = 0
     z = 0
-
+    
+    
+    #filters NNP and ads it to dict where key: index of item in original sentence, item: item AND create list where add indexes of filtered items
     for item in tagged:
         in_memory = tagged.index(item)
         if item[1] == check_list[0] and tagged[in_memory + 1][1] in check_list:
@@ -30,11 +32,9 @@ def paraphrase(tree: str, limit: int):
                 damp_dict.update({in_memory - 1: tagged[in_memory - 1], in_memory: item})
                 damp_list[index_value - 1].append(in_memory)
                 counter = 0
-
-    print(damp_dict)
-    print(damp_list)
-
+    
     while limit > 0:
+        #randomized shuffling to create unique combinations of indexes and ading in specified list
         static_list = damp_list.copy()
         random.shuffle(static_list)
         if static_list != damp_list:
@@ -42,7 +42,8 @@ def paraphrase(tree: str, limit: int):
                 shuffled_list.append(static_list)
 
         copy_of_damp_dict = damp_dict.copy()
-
+        
+        #filtering unique combinations from list and push it in copy of original dict to change items you get with the same key
         for i in shuffled_list:
             x = 0
             if i not in saved_list_of_index:
@@ -58,7 +59,8 @@ def paraphrase(tree: str, limit: int):
         list_of_index.clear()
 
         copy_of_tagged = tagged.copy()
-
+        
+        #creates new unique variant of original sentence
         for i in tagged:
             y = tagged.index(i)
             if y in copy_of_damp_dict:
